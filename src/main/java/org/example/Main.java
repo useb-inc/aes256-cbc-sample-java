@@ -1,5 +1,10 @@
 package org.example;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.nio.file.Paths;
+
 public class Main {
     public static void main(String[] args) throws Exception {
         AES256 AES256 = new AES256();
@@ -10,5 +15,22 @@ public class Main {
 
         String decrypted = AES256.decrypt(encrypted);
         System.out.println("decrypted = " + decrypted);
+
+        String stringTooLong = null;
+        try {
+            String currentPath = Paths.get("").toAbsolutePath().toString();
+            File file = new File(Paths.get(currentPath, "src", "test", "resources", "encrypted.txt").toString());
+            byte[] binary = new byte[(int) file.length()];
+            InputStream stream = new FileInputStream(file);
+            stream.read(binary);
+            stream.close();
+            stringTooLong = new String(binary);
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+
+        // When
+        String actual = AES256.decrypt(stringTooLong);
+        System.out.println("decrypted from file(test/resources/encrypted.txt)" + actual);
     }
 }
