@@ -7,8 +7,8 @@ import java.util.Base64;
 
 public class AES256 {
     public static String alg = "AES/CBC/PKCS5Padding";
-    private final String key = "12345678901234567890123456789012"; // 32 bytes (YOUR KEY)
-    private final String iv = "1234567890123456"; // 16 bytes (YOUR IV)
+    private final String key = "RkxXSxQBoSkutcXYAQ9Lg3B//EKKK/8/"; // 32 bytes (SHOULD BE CHANGED YOUR KEY)
+    private final String iv = "RkxXSxQBoSkutcXY"; // 16 bytes (SHOULD BE CHANGED YOUR IV)
 
     public String encrypt(String text) throws Exception {
         Cipher cipher = Cipher.getInstance(alg);
