@@ -38,12 +38,29 @@ class AES256Test {
         assertEquals(src, actual);
     }
 
-    @DisplayName("Test - Decryption using file IO")
+    @DisplayName("Test - Encrypted using file IO")
     @Test
-    void decryptTest() throws Exception {
+    void encryptTest() throws Exception {
         // Given
         AES256 sut = new AES256();
-        String stringTooLong = null;
+        String plainData = null;
+        String expected = null;
+
+        try {
+            String currentPath = Paths.get("").toAbsolutePath().toString();
+            File file = new File(Paths.get(currentPath, "src", "test", "resources", "plainData.txt").toString());
+            byte[] binary = new byte[(int) file.length()];
+            InputStream stream = new FileInputStream(file);
+            stream.read(binary);
+            stream.close();
+            plainData = new String(binary);
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+
+        // When
+        assert plainData != null;
+        String actual = sut.encrypt(plainData);
 
         try {
             String currentPath = Paths.get("").toAbsolutePath().toString();
@@ -52,14 +69,50 @@ class AES256Test {
             InputStream stream = new FileInputStream(file);
             stream.read(binary);
             stream.close();
-            stringTooLong = new String(binary);
+            expected = new String(binary);
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+
+        // Then
+        assertEquals(expected, actual);
+    }
+
+    @DisplayName("Test - Decryption using file IO")
+    @Test
+    void decryptTest() throws Exception {
+        // Given
+        AES256 sut = new AES256();
+        String encryptedData = null;
+        String expected = null;
+
+        try {
+            String currentPath = Paths.get("").toAbsolutePath().toString();
+            File file = new File(Paths.get(currentPath, "src", "test", "resources", "encrypted.txt").toString());
+            byte[] binary = new byte[(int) file.length()];
+            InputStream stream = new FileInputStream(file);
+            stream.read(binary);
+            stream.close();
+            encryptedData = new String(binary);
         } catch (Throwable e) {
             e.printStackTrace();
         }
 
         // When
-        String actual = sut.decrypt(stringTooLong);
+        String actual = sut.decrypt(encryptedData);
+
+        try {
+            String currentPath = Paths.get("").toAbsolutePath().toString();
+            File file = new File(Paths.get(currentPath, "src", "test", "resources", "plainData.txt").toString());
+            byte[] binary = new byte[(int) file.length()];
+            InputStream stream = new FileInputStream(file);
+            stream.read(binary);
+            stream.close();
+            expected = new String(binary);
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
         // Then
-//        assertEquals(src, actual);
+        assertEquals(expected, actual);
     }
 }
